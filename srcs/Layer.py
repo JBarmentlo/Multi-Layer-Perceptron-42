@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from numpy import matmul, transpose
 import numpy as np
