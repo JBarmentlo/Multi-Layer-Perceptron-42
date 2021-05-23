@@ -8,7 +8,12 @@ def sigmoid(z):
 
 
 def sigmoid_derivative(z, a):
-    return (a) * (1 - a)
+    da = (a) * (1 - a)
+    b, n = da.shape
+    print("da sig\n", da)
+    da = np.einsum('ij,jk->ijk' , da, np.eye(n, n))
+    print("da sig\n", da)
+    return da
 
 
 def softmax_col(z):

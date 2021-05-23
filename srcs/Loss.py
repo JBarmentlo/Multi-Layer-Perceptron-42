@@ -2,6 +2,7 @@ import numpy as np
 
 class BinaryCrossEntropyLoss():
     def __init__(self):
+        self.epsilon = 0.000001
         pass
 
     def loss(self, y_hat, y):
@@ -13,7 +14,7 @@ class BinaryCrossEntropyLoss():
         q = y_hat
         logq = np.log(q)
         loss = np.sum(p * logq, axis = 1, keepdims=True)
-        loss = np.mean(y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat))
+        loss = np.mean(loss)
         return (loss)
 
     
@@ -23,7 +24,7 @@ class BinaryCrossEntropyLoss():
             where djda[*, i] is the derivative of the loss by x[i]
             where x is the *th example
         '''
-        djonda = -1 * (y / y_hat)
+        djonda = -1 * (y / (y_hat + self.epsilon))
         return djonda
 
 

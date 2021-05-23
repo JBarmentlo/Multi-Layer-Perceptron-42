@@ -9,7 +9,7 @@ class Optimizer():
 
 
     def update_weights(self, gradient, layer):
-        # print(gradient)
+        print(gradient.shape)
         layer.w = layer.w - self.lr * gradient
 
 

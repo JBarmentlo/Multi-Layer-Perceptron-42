@@ -64,14 +64,14 @@ class Layer():
 
             returns
         '''
-        # print("djonda", djonda.shape)
-        # print("activation deriv shape", self.activation_derivative(self.z, self.a).shape)
+        print(f"Backwards : {self.activation.__name__}")
         dadz = self.activation_derivative(self.z, self.a)
+        print(f"{dadz.shape = }, {djda.shape = }")
         djdz = np.einsum( 'ik,ikj->ij', djda, dadz)
         djdw = matmul(self.x.T, djdz)
-        print(f"{dadz.shape = }, {djdz.shape = }, {djdw.shape = }, {self.w[1:, :].T.shape = }, {self.w.T.shape = }, {self.x.shape = }")
+        # print(f"{dadz.shape = }, {djdz.shape = }, {djdw.shape = }, {self.w[1:, :].T.shape = }, {self.w.T.shape = }, {self.x.shape = }")
         next_djda = matmul(djdz, self.w[1:, :].T)
-        # print("OUT")
+        print("OUT")
         return next_djda, djdw
 
 
