@@ -12,6 +12,11 @@ class Optimizer():
         # print(gradient)
         layer.w = layer.w - self.lr * gradient
 
+
+    def compute_local_gradients(self, layers):
+        pass
+
+
     def fit(self, layers, y):
         self.local_gradient = self.Loss.loss_derivative(layers[-1].a, y)
         # print("loss dev:", self.local_gradient)

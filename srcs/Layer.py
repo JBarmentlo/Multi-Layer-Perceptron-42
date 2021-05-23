@@ -34,6 +34,7 @@ class Layer():
         self.in_size = in_size
         self.out_size = out_size
         self.w = xavier_init(in_size, out_size)
+        self.local_gradient = None
 
     
     def forward(self, x):
@@ -65,7 +66,9 @@ class Layer():
         '''
         # print("djonda", djonda.shape)
         # print("activation deriv shape", self.activation_derivative(self.z, self.a).shape)
-        djondz = djonda * self.activation_derivative(self.z, self.a)
+        daondz = self.activation_derivative(self.z, self.a)
+        print("daondz shape: ", daondz.shape)
+        djondz = np.einsum('ijk,ik->ij', daondz, djonda)
         # print("x.T.shape", self.x.T.shape)
         # print("djondz shape", djondz.shape)
         djondw = matmul(djondz, self.x.T)
