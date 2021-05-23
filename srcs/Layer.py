@@ -6,7 +6,7 @@ from weights_init import xavier_init
 from utils import add_bias_units
 # float_formatter = "{:.2E}".format
 # np.set_printoptions(formatter={'float_kind':float_formatter})
-float_formatter = "{:.2f}".format
+float_formatter = "{:5.2f}".format
 np.set_printoptions(formatter={'float_kind':float_formatter})
 
 
@@ -63,9 +63,15 @@ class Layer():
 
             returns
         '''
-        djondz = self.activation_derivative(self.z, self.a) * djonda
-        djondw = matmul(self.x.T, djondz)
-        return djondw
+        # print("djonda", djonda.shape)
+        # print("activation deriv shape", self.activation_derivative(self.z, self.a).shape)
+        djondz = djonda * self.activation_derivative(self.z, self.a)
+        # print("x.T.shape", self.x.T.shape)
+        # print("djondz shape", djondz.shape)
+        djondw = matmul(djondz, self.x.T)
+        next_djonda = matmul(self.w[:, 1:].T, djondz)
+        # print("OUT")
+        return next_djonda, djondw
 
 
     def __str__(self):

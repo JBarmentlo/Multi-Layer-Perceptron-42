@@ -22,12 +22,15 @@ class Model():
         self.Optimizer = optimizer
 
 
-
     def feed_forward(self, x):
         for l in self.layers:
             x = l.forward(x)
         return x
 
+
+    def fit(self, x, y):
+        y_hat = self.feed_forward(x)
+        self.Optimizer.fit(self.layers, y)
 
     def __str__(self):
         out = ""
@@ -37,8 +40,3 @@ class Model():
         return (out)
         
 
-import numpy as np
-if __name__ == "__main__":
-    m = Model()
-    print(m)
-    a = m.feed_forward(np.ones([10, 1]))
