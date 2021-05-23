@@ -5,6 +5,10 @@ class BinaryCrossEntropyLoss():
         pass
 
     def loss(self, y_hat, y):
+        '''
+            y_hat and y are of size (*, examples, features)
+            the output J is of size (1)
+        '''
         p = y
         q = y_hat
         logq = np.log(q)
@@ -14,6 +18,11 @@ class BinaryCrossEntropyLoss():
 
     
     def loss_derivative(self, y_hat, y):
+        '''
+            The output is a matrix djda of the size of a
+            where djda[*, i] is the derivative of the loss by x[i]
+            where x is the *th example
+        '''
         djonda = -1 * (y / y_hat)
         return djonda
 

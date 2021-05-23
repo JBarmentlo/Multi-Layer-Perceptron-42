@@ -22,4 +22,5 @@ class Optimizer():
         # print("loss dev:", self.local_gradient)
         for l in reversed(layers):
             self.local_gradient, weights_gradient = l.backwards(self.local_gradient)
+            print(f"{self.local_gradient =}")
             self.update_weights(weights_gradient, l)

@@ -8,7 +8,6 @@ def make_layer_list_from_sizes_and_activations(sizes, activations):
         raise ValueError
     input_size = sizes[0]
     sizes = sizes[1:]
-    print(sizes)
     layers = []
     for size, activation in zip(sizes, activations):
         layers.append(Layer(input_size, size, activation))

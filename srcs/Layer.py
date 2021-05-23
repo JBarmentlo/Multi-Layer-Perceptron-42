@@ -43,39 +43,36 @@ class Layer():
             self.a = self.activation(self.h)
         '''
         self.x = add_bias_units(x)
-        print("x shape", self.x.shape)
-        print(f"{self.w.shape =}")
         self.z = matmul(self.x, self.w)
         self.a = self.activation(self.z)
         return (self.a)
 
 
-    def backwards(self, djonda):
+    def backwards(self, djda):
         '''
             Takes an local gradient vector and computes the partial derivatives in regards to weights and biases.
             returns a matrix M so that M[i, j] is the derivative of the cost J by the weight[i, j]
 
             Inputs:
-                djonda is the derivative of the final cost J in regards to a the activated output of out layer (dj/da)
+                djda is the derivative of the final cost J in regards to a the activated output of out layer (dj/da)
+
 
             Variable names:
-                djonda = dj on da = dj/da
-                djondz = dj on dz = dj/dz
-                djondw = dj/dw
+                djda = dj on da = dj/da
+                djdz = dj on dz = dj/dz
+                djdw = dj/dw
 
             returns
         '''
         # print("djonda", djonda.shape)
         # print("activation deriv shape", self.activation_derivative(self.z, self.a).shape)
-        daondz = self.activation_derivative(self.z, self.a)
-        print("daondz shape: ", daondz.shape)
-        djondz = np.einsum('ijk,ik->ij', daondz, djonda)
-        # print("x.T.shape", self.x.T.shape)
-        # print("djondz shape", djondz.shape)
-        djondw = matmul(djondz, self.x.T)
-        next_djonda = matmul(self.w[:, 1:].T, djondz)
+        dadz = self.activation_derivative(self.z, self.a)
+        djdz = np.einsum( 'ik,ikj->ij', djda, dadz)
+        djdw = matmul(self.x.T, djdz)
+        print(f"{dadz.shape = }, {djdz.shape = }, {djdw.shape = }, {self.w[1:, :].T.shape = }, {self.w.T.shape = }, {self.x.shape = }")
+        next_djda = matmul(djdz, self.w[1:, :].T)
         # print("OUT")
-        return next_djonda, djondw
+        return next_djda, djdw
 
 
     def __str__(self):
