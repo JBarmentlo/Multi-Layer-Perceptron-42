@@ -2,8 +2,7 @@ from datetime import datetime
 from numpy import matmul, transpose
 import numpy as np
 from activations import get_activation_function
-from weights_init import xavier_init
-from utils import add_bias_units
+from utils import add_bias_units, xavier_init
 # float_formatter = "{:.2E}".format
 # np.set_printoptions(formatter={'float_kind':float_formatter})
 float_formatter = "{:5.2f}".format
@@ -15,7 +14,7 @@ class Layer():
     '''
         The layer class takes an iput of shape (in_size, b_dim) and outputs a (out_size, b_dim) output.
         d_dim is the "batch dimension" it can take any value >= 1. It represents the number of examples fed into the net.
-        x is features as colums
+        x is features as columns
 
         The weights are of size: 
         w(out_size, in_size + 1)
@@ -44,7 +43,9 @@ class Layer():
             self.a = self.activation(self.h)
         '''
         self.x = add_bias_units(x)
-        self.z = matmul(self.w, self.x)
+        print("x shape", self.x.shape)
+        print(f"{self.w.shape =}")
+        self.z = matmul(self.x, self.w)
         self.a = self.activation(self.z)
         return (self.a)
 

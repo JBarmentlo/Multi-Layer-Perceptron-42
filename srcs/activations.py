@@ -16,6 +16,10 @@ def softmax_col(z):
     s = np.sum(e, axis = 0, keepdims=True)
     return (e/s)
 
+def softmax_row(z):
+    e = np.exp(z - np.max(z))
+    s = np.sum(e, axis = 1, keepdims=True)
+    return (e/s)
 
 def softmax_col_derivative(z, a):
     '''
@@ -27,8 +31,11 @@ def softmax_col_derivative(z, a):
         }
         there will be an extra dimension as batch dimension (it will be the first dimension)(as there are multiple examples in a)
     '''
-    m, n = a.shape # m = nb features, n = nb examples
-    t1 = np.einsum('')
+    a = a.T
+    m, n = a.shape # m = nb examples, n = nb features
+    t1 = np.einsum('ik,jk->ijk') 
+    # (t1 tize: n, m, n) the first dimension is of the examples (t1[0] will be the jacobian matrix for the first example)
+    diag = np.einsum('ijk, ->', a, np.eye(m, m))
 
 
     # First we create for each example feature vector, it's outer product with itself

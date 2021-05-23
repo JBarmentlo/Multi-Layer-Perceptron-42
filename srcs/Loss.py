@@ -8,7 +8,7 @@ class BinaryCrossEntropyLoss():
         p = y
         q = y_hat
         logq = np.log(q)
-        loss = np.sum(p * logq, axis = 0, keepdims=True)
+        loss = np.sum(p * logq, axis = 1, keepdims=True)
         loss = np.mean(y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat))
         return (loss)
 
