@@ -10,9 +10,11 @@ def sigmoid(z):
 def sigmoid_derivative(z, a):
     da = (a) * (1 - a)
     b, n = da.shape
-    print("da sig\n", da)
+    # print("da sig\n", da)
+    # print(f"{da[0] =} , \n{da[1] = }")
     da = np.einsum('ij,jk->ijk' , da, np.eye(n, n))
-    print("da sig\n", da)
+    # print(f"{da[0] =} , \n{da[1] = }")
+    # print("da sig\n", da)
     return da
 
 

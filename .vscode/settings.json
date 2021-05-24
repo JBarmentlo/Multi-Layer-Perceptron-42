@@ -1,0 +1,6 @@
+{
+    "python.pythonPath": "venv/bin/python",
+    "python.autoComplete.extraPaths": [
+    "/home/yup/Desktop/Code/School/MLP2/srcs"
+    ]
+}

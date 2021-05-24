@@ -1,6 +1,6 @@
 from Layer import Layer
 from Optimizer import Optimizer
-from Loss import BinaryCrossEntropyLoss
+from Loss import CrossEntropyLoss
 
 def make_layer_list_from_sizes_and_activations(sizes, activations):
     if (len(sizes) != (len(activations) + 1)):
@@ -16,7 +16,7 @@ def make_layer_list_from_sizes_and_activations(sizes, activations):
 
 
 class Model():
-    def __init__(self, sizes = [10, 15, 16, 2], activations = ["sigmoid", "sigmoid", "softmax"], optimizer = Optimizer(learning_rate = 0.1, Loss = BinaryCrossEntropyLoss())):
+    def __init__(self, sizes = [10, 15, 16, 2], activations = ["sigmoid", "sigmoid", "softmax"], optimizer = Optimizer(learning_rate = 0.1, Loss = CrossEntropyLoss())):
         self.layers = make_layer_list_from_sizes_and_activations(sizes, activations)
         self.Optimizer = optimizer
 

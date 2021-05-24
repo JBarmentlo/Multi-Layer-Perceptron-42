@@ -1,6 +1,6 @@
 import numpy as np
 
-class BinaryCrossEntropyLoss():
+class CrossEntropyLoss():
     def __init__(self):
         self.epsilon = 0.000001
         pass
@@ -26,6 +26,33 @@ class BinaryCrossEntropyLoss():
         '''
         djonda = -1 * (y / (y_hat + self.epsilon))
         return djonda
+
+
+class MSELoss():
+    def __init__(self):
+        self.epsilon = 0.000001
+        pass
+
+    def loss(self, y_hat, y):
+        '''
+            y_hat and y are of size (*, examples, features)
+            the output J is of size (1)
+        '''
+        p = y
+        q = y_hat
+        loss = np.sum(np.square(q - p), axis = 1, keepdims=True)
+        loss = np.mean(loss) / 2
+        return (loss)
+
+    
+    def loss_derivative(self, y_hat, y):
+        '''
+            The output is a matrix djda of the size of a
+            where djda[*, i] is the derivative of the loss by x[i]
+            where x is the *th example
+        '''
+        djda = (y_hat - y)
+        return djda
 
 
 # class BinaryCrossEntropyLoss():

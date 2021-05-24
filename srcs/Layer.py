@@ -3,6 +3,7 @@ from numpy import matmul, transpose
 import numpy as np
 from activations import get_activation_function
 from utils import add_bias_units, xavier_init
+import logging
 # float_formatter = "{:.2E}".format
 # np.set_printoptions(formatter={'float_kind':float_formatter})
 float_formatter = "{:5.2f}".format
@@ -64,14 +65,16 @@ class Layer():
 
             returns
         '''
-        print(f"Backwards : {self.activation.__name__}")
+        # print(f"Backwards : {self.activation.__name__}")
         dadz = self.activation_derivative(self.z, self.a)
-        print(f"{dadz.shape = }, {djda.shape = }")
+        # print(f"{dadz.shape = }, {djda.shape = }")
         djdz = np.einsum( 'ik,ikj->ij', djda, dadz)
+        logging.debug(f"{djdz = }")
         djdw = matmul(self.x.T, djdz)
+        logging.debug(f"{djdw = }")
         # print(f"{dadz.shape = }, {djdz.shape = }, {djdw.shape = }, {self.w[1:, :].T.shape = }, {self.w.T.shape = }, {self.x.shape = }")
         next_djda = matmul(djdz, self.w[1:, :].T)
-        print("OUT")
+        # print("OUT")
         return next_djda, djdw
 
 
