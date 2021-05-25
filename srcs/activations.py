@@ -62,7 +62,7 @@ def softmax_row_derivative(z, a):
         there will be an extra dimension as batch dimension (it will be the first dimension)(as there are multiple examples in a)
     '''
     m, n = a.shape # m = nb examples, n = nb features
-    t1 = np.einsum('ij,ik->ijk', a, a) 
+    t1 = np.einsum('ij,ik->ijk', a, a)
     # (t1 tize: m, n, n) the first dimension is of the examples (t1[0] will be the jacobian matrix for the first example)
     diag = np.einsum('ik,jk->ijk', a, np.eye(n, n))
     substract = diag - t1
