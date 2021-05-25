@@ -1,4 +1,5 @@
 from datetime import datetime
+from types import new_class
 from numpy import matmul, transpose
 import numpy as np
 from activations import get_activation_function
@@ -9,6 +10,7 @@ import logging
 float_formatter = "{:5.2f}".format
 np.set_printoptions(formatter={'float_kind':float_formatter})
 
+logger = logging.getLogger('spam_application')
 
 # TODO: Change docstrings to represent bias units addition
 class Layer():
@@ -65,15 +67,17 @@ class Layer():
 
             returns
         '''
-        # print(f"Backwards : {self.activation.__name__}")
+        logging.debug(f"Backwards : {self.activation.__name__}")
         dadz = self.activation_derivative(self.z, self.a)
         # print(f"{dadz.shape = }, {djda.shape = }")
+        logging.debug(f"djda:\n {djda}\n")
         djdz = np.einsum( 'ik,ikj->ij', djda, dadz)
-        logging.debug(f"{djdz = }")
+        logging.debug(f"djdz:\n {djdz}\n")
         djdw = matmul(self.x.T, djdz)
-        logging.debug(f"{djdw = }")
+        logging.debug(f"djdw:\n{djdw}\n")
         # print(f"{dadz.shape = }, {djdz.shape = }, {djdw.shape = }, {self.w[1:, :].T.shape = }, {self.w.T.shape = }, {self.x.shape = }")
         next_djda = matmul(djdz, self.w[1:, :].T)
+        logging.debug(f"{next_djda.shape = } \nnext_djda:  \n{next_djda * 10}\n\n")
         # print("OUT")
         return next_djda, djdw
 

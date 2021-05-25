@@ -24,8 +24,9 @@ class CrossEntropyLoss():
             where djda[*, i] is the derivative of the loss by x[i]
             where x is the *th example
         '''
-        djonda = -1 * (y / (y_hat + self.epsilon))
-        return djonda
+        # djonda = -1 * (y / (y_hat + self.epsilon))
+        djonda = -1 * y_hat / (y + self.epsilon) + (1 - y_hat) / (1 - y + self.epsilon)
+        return djonda / y.shape[0]
 
 
 class MSELoss():

@@ -1,5 +1,6 @@
 import numpy as np
 from Loss import CrossEntropyLoss
+import logging
 
 class Optimizer():
     def __init__(self, learning_rate = 0.1, Loss = CrossEntropyLoss()):
@@ -11,6 +12,7 @@ class Optimizer():
     def update_weights(self, gradient, layer):
         # print(gradient.shape)
         layer.w = layer.w - self.lr * gradient
+        logging.debug(f"l.w :\n{layer.w}")
 
 
     def compute_local_gradients(self, layers):
@@ -21,6 +23,6 @@ class Optimizer():
         self.local_gradient = self.Loss.loss_derivative(layers[-1].a, y)
         # print("loss dev:", self.local_gradient)
         for l in reversed(layers):
-            self.local_gradient, weights_gradient = l.backwards(self.local_gradient)
+            self.local_gradient, weights_gradient = l.backwards(djda=self.local_gradient)
             # print(f"{self.local_gradient =}")
             self.update_weights(weights_gradient, l)

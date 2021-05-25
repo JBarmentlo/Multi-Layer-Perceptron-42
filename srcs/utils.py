@@ -12,6 +12,7 @@ def add_bias_units(a):
 
 
 def xavier_init(in_size, out_size):
+    np.random.seed(12)
     invsqrtn = 1.0 / sqrt(in_size)
     lower = -invsqrtn
     upper = invsqrtn
