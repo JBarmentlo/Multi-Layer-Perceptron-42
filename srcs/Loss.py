@@ -1,6 +1,7 @@
 import numpy as np
 import logging
 
+epsilon = 0.000001
 
 class CrossEntropyLoss():
     def __init__(self):
@@ -28,11 +29,10 @@ class CrossEntropyLoss():
         '''
         # djonda = -1 * (y / (y_hat + self.epsilon))
         # djonda = (-1 * y_hat / (y + self.epsilon)) + ((1 - y_hat) / (1 - y + self.epsilon))
-        logging.debug(f"y:\n{y}")
-        logging.debug(f"yhat:\n{y_hat}")
-        djda = -1 * y / y_hat
-        logging.debug(f"-y / yhat:\n{-1 * y / y_hat}")
-
+        # logging.debug(f"y:\n{y}")
+        # logging.debug(f"yhat:\n{y_hat}")
+        djda = -1 * y / (y_hat + epsilon)
+        # logging.debug(f"-y / yhat:\n{-1 * y / y_hat}")
         return djda
 
 
