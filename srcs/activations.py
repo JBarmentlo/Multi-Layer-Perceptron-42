@@ -2,6 +2,8 @@ import numpy as np
 from scipy.special import softmax, expit
 import logging
 
+activationslogger = logging.getLogger("Activations")
+activationslogger.setLevel(logging.WARNING)
 epsilon = 0.00001
 
 def sigmoid(z):
@@ -39,14 +41,14 @@ def identyty_derivative(z, a):
 
 
 def softmax_row(z):
-    # logging.debug(f"z.shape: {z.shape}\nz:\n{z}\nnp.nax.z:\n{z.max(axis=1)}\n")
-    # e = np.exp(z)
+    activationslogger.debug("Softmax call")
+    activationslogger.debug(f"z.shape: {z.shape}\nz:\n{z}\nnp.nax.z:\n{z.max(axis=1)}\n")
     z = z - z.max(axis = 1, keepdims=True)
-    # logging.debug(f"z:\n{z}\n")
+    activationslogger.debug(f"z:\n{z}\n")
     e = np.exp(z)
-    # logging.debug(f"e:\n{e}")
+    activationslogger.debug(f"e:\n{e}")
     s = np.sum(e, axis = 1, keepdims=True)
-    # logging.debug(f"s : {s}")
+    activationslogger.debug(f"s : {s}")
     return (e/(s))
 
 
