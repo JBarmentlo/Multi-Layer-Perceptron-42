@@ -1,6 +1,8 @@
 import numpy as np
 import logging
 
+losslogger = logging.getLogger("Loss")
+losslogger.setLevel(logging.DEBUG)
 epsilon = 0.000001
 
 class CrossEntropyLoss():
@@ -33,6 +35,8 @@ class CrossEntropyLoss():
         # logging.debug(f"yhat:\n{y_hat}")
         djda = -1 * y / (y_hat + epsilon)
         # logging.debug(f"-y / yhat:\n{-1 * y / y_hat}")
+        djda = djda / y.shape[0]
+        losslogger.debug(f"djda:\n{djda}\n")
         return djda
 
 
