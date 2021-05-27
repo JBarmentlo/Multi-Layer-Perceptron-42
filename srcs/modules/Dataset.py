@@ -3,6 +3,7 @@ import numpy as np
 import logging
 from sklearn.preprocessing import StandardScaler 
 from .K_fold_iterator import KFoldIterator
+from .BatchIterator import BatchIterator
 
 categorical_cols = ["Hogwarts House", "Best Hand"]
 categorical_col_prefix = ["House", "Hand"]
@@ -17,6 +18,19 @@ def format_birthdays(df):
     df["Birth Year"] = df["Birthday"].apply(lambda x: x.year).astype(float)
     df["Birth Month"] = df["Birthday"].apply(lambda x: x.month).astype(float)
     df.drop(["Birthday"], axis=1, inplace = True)
+
+
+def create_dataset_from_path(path):
+    self.data = pd.read_csv(path, usecols=usefull_cols).dropna().to_numpy()
+    df = pd.read_csv(path, usecols=usefull_cols)
+    df.fillna(df.median(), inplace = True)
+    y_df = pd.get_dummies(df["Hogwarts House"] ,drop_first = False)
+    df.drop(["Hogwarts House"], axis = 1, inplace = True)
+    self.y = y_df.to_numpy()
+    self.y_p = self.y.shape[1]
+    self.x = df.to_numpy()
+    self.p = self.x.shape[1]
+    self.m = self.x.shape[0]
 
 
 class Dataset():
@@ -86,8 +100,12 @@ class Dataset():
         self.y_test = self.y[notmask, :]
 
 
-    def k_fold_iter(self, k):
+    def k_fold_iterator(self, k):
         return (KFoldIterator(k, self.x, self.y))
+
+
+    def batchiterator(self, batchsize):
+        return BatchIterator(self.x, self.y, batchsize)
 
 
     def add_ones_to_x(self):

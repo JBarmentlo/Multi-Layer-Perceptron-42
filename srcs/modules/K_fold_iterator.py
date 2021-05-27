@@ -37,7 +37,7 @@ class KFoldIterator():
 
     def __next__(self):
         '''
-            returns a (x_train, y_train, x_test, y_test) tuple
+            # returns a (x_train, y_train, x_test, y_test) tuple
         '''
         self.current_k += 1
         if (self.current_k >= self.k):
