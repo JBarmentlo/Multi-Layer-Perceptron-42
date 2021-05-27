@@ -26,7 +26,7 @@ class BatchIterator():
             returns a x,y tuple
         '''
         mask = np.zeros(self.size, dtype=bool)
-        maxidx = min((i + 1) * self.batch_size, self.size)
+        max_idx = min((i + 1) * self.batch_size, self.size)
         idx = np.arange(i * self.batch_size, max_idx, 1)
         idx = self.idx[idx]
         mask[idx] = True

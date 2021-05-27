@@ -1,15 +1,15 @@
 from modules import Model, Dataset
-from utils import activations
+from utils import activations, create_dataset_from_path
 import numpy as np
 import os
 
 if __name__ == "__main__":
     dataset_path = os.path.join(os.environ["BASE_DIR"], "datasets/dataset_train.csv")
-    d = Dataset(dataset_path)
+    d = create_dataset_from_path(dataset_path)
     m = Model(sizes = [8, 10, 4], activations = ["sigmoid", "softmax"])
     # print(d.y[0])
     d.split_test_train(5)
-    for i in range(1000):
+    for i in range(1):
         # print(i)
         m.fit(d.x_train, d.y_train)
     out = m.feed_forward(d.x_test)

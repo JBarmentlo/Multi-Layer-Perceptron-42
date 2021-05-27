@@ -5,43 +5,16 @@ from sklearn.preprocessing import StandardScaler
 from .K_fold_iterator import KFoldIterator
 from .BatchIterator import BatchIterator
 
-categorical_cols = ["Hogwarts House", "Best Hand"]
-categorical_col_prefix = ["House", "Hand"]
-useless_cols = ["First Name", "Last Name", "Index"]
-usefull_cols = ["Hogwarts House", "Muggle Studies", "Transfiguration", "Divination", 'Ancient Runes', 'Astronomy', 'Herbology', 'Defense Against the Dark Arts']
-path = "datasets/dataset_train.csv"
 
-def drop_useless_cols(df, useless_cols = useless_cols):
-    df.drop(useless_cols, axis = 1, inplace = True)
-
-def format_birthdays(df):
-    df["Birth Year"] = df["Birthday"].apply(lambda x: x.year).astype(float)
-    df["Birth Month"] = df["Birthday"].apply(lambda x: x.month).astype(float)
-    df.drop(["Birthday"], axis=1, inplace = True)
-
-
-def create_dataset_from_path(path):
-    self.data = pd.read_csv(path, usecols=usefull_cols).dropna().to_numpy()
-    df = pd.read_csv(path, usecols=usefull_cols)
-    df.fillna(df.median(), inplace = True)
-    y_df = pd.get_dummies(df["Hogwarts House"] ,drop_first = False)
-    df.drop(["Hogwarts House"], axis = 1, inplace = True)
-    self.y = y_df.to_numpy()
-    self.y_p = self.y.shape[1]
-    self.x = df.to_numpy()
-    self.p = self.x.shape[1]
-    self.m = self.x.shape[0]
 
 
 class Dataset():
-    def __init__(self, path, standardize = True, test_set=False):
-        self.data = None
-        self.i = -1
-        try:
-            self.read_csv(path, test_set)
-        except Exception as e:
-            print(f"Please give a valid input, only numeric data is accepted\n{e}")
-            raise ValueError
+    def __init__(self, x, y, standardize = True, test_set=False):
+        self.x = x
+        self.y = y
+        self.y_p = self.y.shape[1]
+        self.p = self.x.shape[1]
+        self.m = self.x.shape[0]
         self.standardized = False
         if (standardize):
             self.standardize()
@@ -59,28 +32,6 @@ class Dataset():
         self.x_scaler = StandardScaler()
         self.x_scaler.fit(self.x)
         self.x = self.x_scaler.transform(self.x)
-
-
-    def read_csv(self, path, test_set):
-        if (not test_set):
-            self.data = pd.read_csv(path, usecols=usefull_cols).dropna().to_numpy()
-            df = pd.read_csv(path, usecols=usefull_cols)
-            df.fillna(df.median(), inplace = True)
-            y_df = pd.get_dummies(df["Hogwarts House"] ,drop_first = False)
-            df.drop(["Hogwarts House"], axis = 1, inplace = True)
-            self.y = y_df.to_numpy()
-            self.y_p = self.y.shape[1]
-            self.x = df.to_numpy()
-            self.p = self.x.shape[1]
-            self.m = self.x.shape[0]
-        else:
-            cols = usefull_cols
-            cols.remove("Hogwarts House")
-            df = pd.read_csv(path, usecols=cols)
-            df.fillna(df.median(), inplace = True)
-            self.x = df.to_numpy()
-            self.p = self.x.shape[1]
-            self.m = self.x.shape[0]
 
 
     def split_test_train(self, k = 5):
