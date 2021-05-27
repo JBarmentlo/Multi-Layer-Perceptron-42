@@ -46,7 +46,7 @@ class Model():
                 for e in range(epochs):
                     for x, y in train_dataset.batchiterator(batchsize):
                         self.fit(x, y)
-                    print(f"Fold: {f}/{folds} -  Epoch: {e:4}/{epochs} - Loss: {self.Optimizer.Loss.loss(self.feed_forward(train_dataset.x), train_dataset.y):.4f}  Validation Loss: {self.Optimizer.Loss.loss(self.feed_forward(test_dataset.x), test_dataset.y):.4f}")
+                    print(f"Fold: {f+ 1}/{folds} -  Epoch: {e:4}/{epochs} - Loss: {self.Optimizer.Loss.loss(self.feed_forward(train_dataset.x), train_dataset.y):.4f}  Validation Loss: {self.Optimizer.Loss.loss(self.feed_forward(test_dataset.x), test_dataset.y):.4f}")
                 print("\n")
             except StopIteration:
                 pass

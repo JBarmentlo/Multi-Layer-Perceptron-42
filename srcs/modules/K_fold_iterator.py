@@ -7,7 +7,7 @@ class KFoldIterator():
         self.x = x
         self.y = y
         self.size = x.shape[0]
-        self.current_k = 0
+        self.current_k = -1
         self.gen_random_idx()
 
 
