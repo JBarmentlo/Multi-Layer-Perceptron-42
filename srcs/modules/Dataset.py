@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import logging
 from sklearn.preprocessing import StandardScaler 
-from .K_fold_iterator import KFoldIterator
+# from .K_fold_iterator import KFoldIterator
 from .BatchIterator import BatchIterator
 
 
@@ -18,7 +18,7 @@ class Dataset():
         self.standardized = False
         if (standardize):
             self.standardize()
-        self.add_ones_to_x()
+        # self.add_ones_to_x()
 
 
     def destandardize(self):
@@ -51,8 +51,8 @@ class Dataset():
         self.y_test = self.y[notmask, :]
 
 
-    def k_fold_iterator(self, k):
-        return (KFoldIterator(k, self.x, self.y))
+    # def k_fold_iterator(self, k):
+    #     return (KFoldIterator(k, self.x, self.y))
 
 
     def batchiterator(self, batchsize):
@@ -84,4 +84,11 @@ class Dataset():
             self.i = -1
             raise StopIteration
 
+
+class DummyDataset():
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
     
+    def batchiterator(self, batchsize):
+        return BatchIterator(self.x, self.y, batchsize)

@@ -8,11 +8,12 @@ class BatchIterator():
         self.y = y
         self.batch_size = batch_size
         self.size = self.x.shape[0]
+        if ((self.batch_size <= 0) or (self.batch_size > self.size)):
+            self.batch_size = self.size
         self.gen_random_idx()
         self.batch_num_max = int(ceil(self.size / self.batch_size))
         self.batch_num_current = -1
-        if (self.batch_size <= 0 or self.batch_size > self.size):
-            self.batch_size =self.size
+
         
 
     def gen_random_idx(self):

@@ -1,7 +1,8 @@
 import numpy as np
+from .Dataset import Dataset
 
 class KFoldIterator():
-    def __init__(self, k, x, y):
+    def __init__(self, x, y, k):
         self.k = k
         self.x = x
         self.y = y
@@ -30,6 +31,10 @@ class KFoldIterator():
         self.y_test = self.y[test_mask, :]
 
 
+    def batchiterator(self, batchsize):
+        return BatchIterator(self.x_train, self.y_train, batchsize)
+
+
     def __iter__(self):
         self.current_k = -1
         return (self)
@@ -44,7 +49,7 @@ class KFoldIterator():
             raise StopIteration
         else:
             self.gen_ith_fold(self.current_k)
-            return (self.x_train, self.y_train, self.x_test, self.y_test)
+            return Dataset(self.x_train, self.y_train, standardize = False), Dataset(self.x_test, self.y_test, standardize = False)
 
 
     

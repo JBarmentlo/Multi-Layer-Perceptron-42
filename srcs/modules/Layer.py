@@ -11,6 +11,7 @@ float_formatter = "{:5.2f}".format
 np.set_printoptions(formatter={'float_kind':float_formatter})
 
 backproplogger = logging.getLogger('BackProp')
+forwardlogger = logging.getLogger('FeedForward')
 
 # TODO: Change docstrings to represent bias units addition
 class Layer():
@@ -45,6 +46,7 @@ class Layer():
             self.z = self.w * x
             self.a = self.activation(self.h)
         '''
+        forwardlogger.debug(f"x:\n{x.shape}\n w:\n{self.w.shape}\n")
         self.x = add_bias_units(x)
         self.z = matmul(self.x, self.w)
         self.a = self.activation(self.z)
