@@ -1,5 +1,5 @@
 import numpy as np
-from Loss import CrossEntropyLoss
+from .Loss import CrossEntropyLoss
 import logging
 optimizerlogger = logging.getLogger("Optimizer")
 optimizerlogger.setLevel(logging.WARNING)

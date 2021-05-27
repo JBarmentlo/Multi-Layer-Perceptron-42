@@ -1,12 +1,12 @@
 from datetime import datetime
-from types import new_class
+# from types import new_class
 from numpy import matmul, transpose
 import numpy as np
-from activations import get_activation_function
-from utils import add_bias_units, xavier_init
 import logging
-# float_formatter = "{:.2E}".format
-# np.set_printoptions(formatter={'float_kind':float_formatter})
+
+from utils.activations import get_activation_function
+from utils import add_bias_units, xavier_init
+
 float_formatter = "{:5.2f}".format
 np.set_printoptions(formatter={'float_kind':float_formatter})
 

@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import logging
 from sklearn.preprocessing import StandardScaler 
+from .K_fold_iterator import KFoldIterator
 
 categorical_cols = ["Hogwarts House", "Best Hand"]
 categorical_col_prefix = ["House", "Hand"]
@@ -68,6 +69,25 @@ class Dataset():
             self.m = self.x.shape[0]
 
 
+    def split_test_train(self, k = 5):
+        '''
+            if k is smaller than 2 it takes the default value 2
+        '''
+        if (k <= 1):
+            k = 2
+        population = self.x.shape[0] 
+        idx = np.random.choice(population, int(population / k), replace=False)
+        mask = np.ones(population, dtype=bool)
+        mask[idx] = False
+        notmask = ~mask
+        self.x_train = self.x[mask, :]
+        self.x_test = self.x[notmask, :]
+        self.y_train = self.y[mask, :]
+        self.y_test = self.y[notmask, :]
+
+
+    def k_fold_iter(self, k):
+        return (KFoldIterator(k, self.x, self.y))
 
 
     def add_ones_to_x(self):

@@ -32,7 +32,7 @@ def identity(z):
     return (z)
 
 
-def identyty_derivative(z, a):
+def identity_derivative(z, a):
     b, n = a.shape
     # print("da sig\n", da)
     # print(f"{da[0] =} , \n{da[1] = }")

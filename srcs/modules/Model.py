@@ -1,6 +1,6 @@
-from Layer import Layer
-from Optimizer import Optimizer
-from Loss import CrossEntropyLoss
+from .Layer import Layer
+from .Optimizer import Optimizer
+from .Loss import CrossEntropyLoss
 
 def make_layer_list_from_sizes_and_activations(sizes, activations):
     if (len(sizes) != (len(activations) + 1)):
