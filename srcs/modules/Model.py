@@ -17,7 +17,7 @@ def make_layer_list_from_sizes_and_activations(sizes, activations):
 
 
 class Model():
-    def __init__(self, sizes = [7, 15, 16, 2], activations = ["sigmoid", "sigmoid", "softmax"], optimizer = Optimizer(learning_rate = 0.1, Loss = CrossEntropyLoss())):
+    def __init__(self, sizes, activations, optimizer = Optimizer(learning_rate = 0.1, Loss = CrossEntropyLoss())):
         self.layers = make_layer_list_from_sizes_and_activations(sizes, activations)
         self.Optimizer = optimizer
         self.Optimizer.layers = self.layers
@@ -40,19 +40,9 @@ class Model():
             self.fit(x, y)
 
 
-    def train(self, dataset, epochs = 100, batchsize = 0, folds = 1, train_test_ratio = 5):
-        kfold_iterator = KFoldIterator(dataset.x, dataset.y, train_test_ratio)
-        for f in range(folds):
-            try:
-                train_dataset, test_dataset = next(kfold_iterator)
-                for e in range(epochs):
-                    for x, y in train_dataset.batchiterator(batchsize):
-                        self.fit(x, y)
-                    print(f"Fold: {f+ 1}/{folds}  \tEpoch: {e:4}/{epochs}   \tLoss: {self.Optimizer.Loss.loss(self.feed_forward(train_dataset.x), train_dataset.y):.4f}    \tValidation Loss: {self.Optimizer.Loss.loss(self.feed_forward(test_dataset.x), test_dataset.y):.4f}")
-                    loss = self.Optimizer.Loss.loss(self.feed_forward(train_dataset.x), train_dataset.y)
-                print("\n")
-            except StopIteration:
-                pass
+    def train(self, dataset, batchsize = 0):
+        for x, y in dataset.batchiterator(batchsize):
+            self.fit(x, y)
 
     def __str__(self):
         out = ""

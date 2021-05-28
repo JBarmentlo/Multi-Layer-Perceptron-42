@@ -1,1 +1,1 @@
-from .utils import xavier_init, add_bias_units, create_dataset_from_path, evaluate_binary_classifier, evaluate_nonbinary_classifier
+from .utils import xavier_init, add_bias_units, create_dataset_from_path, calculate_and_display_metrics, evaluate_binary_classifier
