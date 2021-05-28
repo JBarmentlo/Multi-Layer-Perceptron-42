@@ -4,4 +4,4 @@ from .K_fold_iterator import KFoldIterator
 from .Layer import Layer
 from .Loss import CrossEntropyLoss, MSELoss
 from .Model import Model
-from .Optimizer import Optimizer
+from .Optimizer import Optimizer, NAGOptimizer

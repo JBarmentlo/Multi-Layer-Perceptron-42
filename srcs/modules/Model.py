@@ -20,7 +20,7 @@ class Model():
     def __init__(self, sizes = [7, 15, 16, 2], activations = ["sigmoid", "sigmoid", "softmax"], optimizer = Optimizer(learning_rate = 0.1, Loss = CrossEntropyLoss())):
         self.layers = make_layer_list_from_sizes_and_activations(sizes, activations)
         self.Optimizer = optimizer
-
+        self.Optimizer.layers = self.layers
 
     def feed_forward(self, x):
         for l in self.layers:
@@ -29,8 +29,10 @@ class Model():
 
 
     def fit(self, x, y):
+        self.Optimizer.pre_fit(x, y)
         y_hat = self.feed_forward(x)
         self.Optimizer.fit(self.layers, y)
+        self.Optimizer.post_fit(x, y)
 
 
     def epoch(self, batchiterator):
@@ -43,14 +45,14 @@ class Model():
         for f in range(folds):
             try:
                 train_dataset, test_dataset = next(kfold_iterator)
-                last_loss = 0
+                # last_loss = 0
                 for e in range(epochs):
                     for x, y in train_dataset.batchiterator(batchsize):
                         self.fit(x, y)
                     print(f"Fold: {f+ 1}/{folds}  \tEpoch: {e:4}/{epochs}   \tLoss: {self.Optimizer.Loss.loss(self.feed_forward(train_dataset.x), train_dataset.y):.4f}    \tValidation Loss: {self.Optimizer.Loss.loss(self.feed_forward(test_dataset.x), test_dataset.y):.4f}")
                     loss = self.Optimizer.Loss.loss(self.feed_forward(train_dataset.x), train_dataset.y)
-                    print("loss ratio: ", last_loss / loss)
-                    last_loss = loss
+                    # print("loss ratio: ", last_loss / loss)
+                    # last_loss = loss
                 print("\n")
             except StopIteration:
                 pass
