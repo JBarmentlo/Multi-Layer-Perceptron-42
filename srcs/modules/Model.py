@@ -45,14 +45,11 @@ class Model():
         for f in range(folds):
             try:
                 train_dataset, test_dataset = next(kfold_iterator)
-                # last_loss = 0
                 for e in range(epochs):
                     for x, y in train_dataset.batchiterator(batchsize):
                         self.fit(x, y)
                     print(f"Fold: {f+ 1}/{folds}  \tEpoch: {e:4}/{epochs}   \tLoss: {self.Optimizer.Loss.loss(self.feed_forward(train_dataset.x), train_dataset.y):.4f}    \tValidation Loss: {self.Optimizer.Loss.loss(self.feed_forward(test_dataset.x), test_dataset.y):.4f}")
                     loss = self.Optimizer.Loss.loss(self.feed_forward(train_dataset.x), train_dataset.y)
-                    # print("loss ratio: ", last_loss / loss)
-                    # last_loss = loss
                 print("\n")
             except StopIteration:
                 pass
