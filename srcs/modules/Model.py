@@ -38,15 +38,19 @@ class Model():
             self.fit(x, y)
 
 
-    def train(self, dataset, epochs = 10, batchsize = 0, folds = 5, train_test_ratio = 5):
+    def train(self, dataset, epochs = 100, batchsize = 0, folds = 1, train_test_ratio = 5):
         kfold_iterator = KFoldIterator(dataset.x, dataset.y, train_test_ratio)
         for f in range(folds):
             try:
                 train_dataset, test_dataset = next(kfold_iterator)
+                last_loss = 0
                 for e in range(epochs):
                     for x, y in train_dataset.batchiterator(batchsize):
                         self.fit(x, y)
-                    print(f"Fold: {f+ 1}/{folds} -  Epoch: {e:4}/{epochs} - Loss: {self.Optimizer.Loss.loss(self.feed_forward(train_dataset.x), train_dataset.y):.4f}  Validation Loss: {self.Optimizer.Loss.loss(self.feed_forward(test_dataset.x), test_dataset.y):.4f}")
+                    print(f"Fold: {f+ 1}/{folds}  \tEpoch: {e:4}/{epochs}   \tLoss: {self.Optimizer.Loss.loss(self.feed_forward(train_dataset.x), train_dataset.y):.4f}    \tValidation Loss: {self.Optimizer.Loss.loss(self.feed_forward(test_dataset.x), test_dataset.y):.4f}")
+                    loss = self.Optimizer.Loss.loss(self.feed_forward(train_dataset.x), train_dataset.y)
+                    print("loss ratio: ", last_loss / loss)
+                    last_loss = loss
                 print("\n")
             except StopIteration:
                 pass

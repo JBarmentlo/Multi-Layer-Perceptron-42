@@ -22,22 +22,27 @@ def sigmoid_derivative(z, a):
     return da
 
 
-def softmax_col(z):
-    e = np.exp(z - np.max(z))
-    s = np.sum(e, axis = 0, keepdims=True)
-    return (e/s)
-
-
 def identity(z):
     return (z)
 
 
 def identity_derivative(z, a):
     b, n = a.shape
-    # print("da sig\n", da)
-    # print(f"{da[0] =} , \n{da[1] = }")
     da = np.einsum('ij,jk->ijk' , np.ones(a.shape), np.eye(n, n))
     return da
+
+
+def relu(z):
+    return(np.abs(z) + z) / 2
+
+
+def relu_derivative(z, a):
+    activationslogger.debug(f"ReLu Prime")
+    b, n = z.shape
+    np.heaviside(z, 1, out = z)
+    activationslogger.debug(f"z:\n{z}\n")
+    dadz = np.einsum('ij,jk->ijk' , z, np.eye(n, n))
+    return dadz
 
 
 def softmax_row(z):
@@ -77,6 +82,8 @@ def get_activation_function(activation):
         if activation == 'softmax':
             return softmax_row, softmax_row_derivative
         if activation == "identity":
-            return identity, identyty_derivative
-        print("You have entered an incorrect activation function name, defaulting to softmax")
-        return softmax_row, softmax_row_derivative
+            return identity, identity_derivative
+        if activation == "relu":
+            return relu, relu_derivative
+        print("You have entered an incorrect activation function name, defaulting to sigmoid")
+        return sigmoid, sigmoid_derivative

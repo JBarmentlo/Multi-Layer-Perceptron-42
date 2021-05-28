@@ -19,7 +19,7 @@ class CrossEntropyLoss():
         q = y_hat
         logq = np.log(q)
         loss = np.sum(p * logq, axis = 1, keepdims=True)
-        loss = np.mean(loss)
+        loss = -1.0 * np.mean(loss)
         return (loss)
 
     
