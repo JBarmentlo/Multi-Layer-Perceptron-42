@@ -5,14 +5,14 @@ optimizerlogger = logging.getLogger("Optimizer")
 optimizerlogger.setLevel(logging.WARNING)
 
 class Optimizer():
-    def __init__(self, learning_rate = 0.1, Loss = CrossEntropyLoss()):
+    def __init__(self, learning_rate = 0.1, Loss = CrossEntropyLoss(), method = "classic"):
         self.Loss = Loss
         self.lr = learning_rate
+        self.last_grad = None
         self.local_gradient = 0
 
 
     def update_weights(self, gradient, layer):
-        # print(gradient.shape)
         layer.w = layer.w - self.lr * gradient
         optimizerlogger.debug(f"l.w :\n{layer.w}")
 
@@ -28,3 +28,5 @@ class Optimizer():
             self.local_gradient, weights_gradient = l.backwards(djda=self.local_gradient)
             optimizerlogger.debug(f"{self.local_gradient =}")
             self.update_weights(weights_gradient, l)
+
+
