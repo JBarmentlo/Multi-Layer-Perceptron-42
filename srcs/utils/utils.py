@@ -3,7 +3,8 @@ from math import sqrt
 from numpy.random import rand
 from modules import Dataset
 import pandas as pd
-
+import os
+import pickle
 
 def add_bias_units(a):
     '''
@@ -95,3 +96,5 @@ def calculate_and_display_metrics(model, x, y):
     '''
     tp, fp, tn, fn = evaluate_binary_classifier(model, x, y)
     print_metrics(tp, fp, tn, fn)
+
+

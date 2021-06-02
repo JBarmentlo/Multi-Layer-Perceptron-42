@@ -1,5 +1,4 @@
-from modules import CrossEntropyLoss, MSELoss
-from modules import Model, Dataset, NAGOptimizer, Optimizer, KFoldIterator
+from modules import Model, Dataset, NAGOptimizer, Optimizer, KFoldIterator, CrossEntropyLoss, MSELoss
 from utils import create_dataset_from_path, calculate_and_display_metrics, evaluate_binary_classifier
 import numpy as np
 import os
@@ -48,6 +47,7 @@ if __name__ == "__main__":
     # m.train(d, batchsize = 32, epochs=50, folds=1)
     calculate_and_display_metrics(m, d.x, d.y)
     tp, fp, tn, fn = evaluate_binary_classifier(m, d.x, d.y)
+    m.save()
     # a = m.feed_forward(np.ones([10, 1]))
     # kfold = d.k_fold_iter(5)
     # for xtr, ytr, xte, yte in kfold:
