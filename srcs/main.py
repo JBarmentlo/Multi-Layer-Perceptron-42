@@ -2,11 +2,13 @@ from modules import Model, Dataset, NAGOptimizer, Optimizer, KFoldIterator, Cros
 from utils import create_dataset_from_path, calculate_and_display_metrics, evaluate_binary_classifier
 import numpy as np
 import os
+from collections import deque
+
 
 # CONFIG ARGUMENTS
 folds = 5 # must be smaller than 5
 reset_between_folds = False # set Trueto reset the model weights at every fold to evaluate the learning preocesstpt
-epochs = 10
+epochs = 100
 batchsize = 32
 dataset_path = os.path.join(os.environ["BASE_DIR"], "data/data.csv")
 print_at_every_epoch = True
@@ -16,21 +18,26 @@ optimizer = NAGOptimizer(learning_rate = 0.03, momentum = 0.9)
 
 def epoch_print(m, train_dataset, test_dataset):
     if (print_at_every_epoch):
-        print(f"Fold: {f+ 1}/{folds}  \tEpoch: {e:4}/{epochs}   \tLoss: {m.Optimizer.Loss.loss(m.feed_forward(train_dataset.x), train_dataset.y):.4f}    \tValidation Loss: {m.Optimizer.Loss.loss(m.feed_forward(test_dataset.x), test_dataset.y):.4f}")
+        print(f"Fold: {f+ 1}/{folds}  \tEpoch: {e + 1:4}/{epochs}   \tLoss: {m.Optimizer.Loss.loss(m.feed_forward(train_dataset.x), train_dataset.y):.4f}    \tValidation Loss: {m.Optimizer.Loss.loss(m.feed_forward(test_dataset.x), test_dataset.y):.4f}")
 
 
 def end_epoch_print(m, train_dataset, test_dataset):
-    if (not print_at_every_epoch):
-        print(f"Fold: {f+ 1}/{folds}  \tEpoch: {e:4}/{epochs}   \tLoss: {m.Optimizer.Loss.loss(m.feed_forward(train_dataset.x), train_dataset.y):.4f}    \tValidation Loss: {m.Optimizer.Loss.loss(m.feed_forward(test_dataset.x), test_dataset.y):.4f}")
+    print(f"Fold: {f+ 1}/{folds}  \tLoss: {m.Optimizer.Loss.loss(m.feed_forward(d.x), d.y):.4f}")
 
 
-# def early_stopper(last_loss,loss)
+def is_overfitting(losses):
+    if len(losses) < 3:
+        return False
+    if ((losses[0] < losses[1]) and (losses[1] < losses[2])):
+        return True
+    return False
 
 
 if __name__ == "__main__":
     np.random.seed(121)
     d = create_dataset_from_path()
     kfold_iterator = KFoldIterator(d.x, d.y, 5)
+    losses = deque(maxlen=3)
     m = Model(sizes = [d.x.shape[1], 15, 8, d.y.shape[1]], activations = ["sigmoid", "sigmoid", "softmax"], optimizer = optimizer)
     for f in range(folds):
         if (reset_between_folds):
@@ -39,6 +46,9 @@ if __name__ == "__main__":
             train_dataset, test_dataset = next(kfold_iterator)
             for e in range(epochs):
                 m.train(train_dataset, batchsize = batchsize)
+                losses.append(m.Optimizer.Loss.loss(m.feed_forward(test_dataset.x), test_dataset.y))
+                if (is_overfitting(losses)):
+                    break
                 epoch_print(m, train_dataset, test_dataset)
             end_epoch_print(m, train_dataset, test_dataset)
             print("\n")
