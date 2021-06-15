@@ -15,6 +15,5 @@ class Grapher():
 
     def plot_metrics(self):
         self.metrics.Epoch = self.metrics.index
-        sns.lineplot(x = "Epoch", y = "F1", data = self.metrics, legend="full")
         sns.lineplot(x = "Epoch", y = "Loss", data = self.metrics, legend="full")
         plt.show()

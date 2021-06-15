@@ -4,8 +4,8 @@ import logging
 from sklearn.preprocessing import StandardScaler 
 # from .K_fold_iterator import KFoldIterator
 from .BatchIterator import BatchIterator
-
-
+import pickle
+import os
 
 
 class Dataset():
@@ -83,6 +83,14 @@ class Dataset():
         else:
             self.i = -1
             raise StopIteration
+
+
+    def save_norm(self, model_name):
+        models = os.path.join(os.environ['BASE_DIR'], "models")
+        path = os.path.join(models, model_name)
+        path = os.path.join(path, "norm.pkl")
+        with open(path, "wb+") as f:
+            pickle.dump(self.x_scaler, f)
 
 
 class DummyDataset():
