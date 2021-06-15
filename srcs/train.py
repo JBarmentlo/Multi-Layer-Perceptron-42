@@ -7,7 +7,7 @@ import argparse
 
 
 # CONFIG ARGUMENTS
-folds = 5 # must be smaller than 5
+folds = 5
 reset_between_folds = False # set Trueto reset the model weights at every fold to evaluate the learning preocesstpt
 epochs = 200
 batchsize = 32
@@ -25,15 +25,15 @@ def epoch_print(m, train_dataset, test_dataset):
     print(f"Epoch: {e + 1:4}/{epochs}   \tLoss: {m.Optimizer.Loss.loss(m.feed_forward(train_dataset.x), train_dataset.y):.4f}    \tValidation Loss: {m.Optimizer.Loss.loss(m.feed_forward(test_dataset.x), test_dataset.y):.4f}")
 
 
-def end_epoch_print(m, train_dataset, test_dataset):
+def end_epoch_print(m, d):
     print(f"Loss: {m.Optimizer.Loss.loss(m.feed_forward(d.x), d.y):.4f}")
 
 
 if __name__ == "__main__":
-    np.random.seed(112)
+    np.random.seed(45)
     grapher = Grapher()
     d = create_dataset_from_path(dataset_path, usecols = usecols, y_col = ycol, y_categorical = y_categorical)
-    kfold_iterator = KFoldIterator(d.x, d.y, 5)
+    kfold_iterator = KFoldIterator(d.x, d.y, folds)
     m = Model(sizes = [d.x.shape[1], 15, 8, d.y.shape[1]], activations = ["sigmoid", "sigmoid", "softmax"], optimizer = optimizer)
     train_dataset, test_dataset = next(kfold_iterator)
     losses = deque(maxlen=5)
@@ -45,7 +45,7 @@ if __name__ == "__main__":
         if (is_overfitting(losses)):
             break
         epoch_print(m, train_dataset, test_dataset)
-    end_epoch_print(m, train_dataset, test_dataset)
+    end_epoch_print(m, d)
     print("\n")
     calculate_and_display_metrics(m, d.x, d.y)
     grapher.plot_metrics()
