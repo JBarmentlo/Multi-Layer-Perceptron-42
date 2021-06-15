@@ -93,6 +93,18 @@ class Dataset():
             pickle.dump(self.x_scaler, f)
 
 
+    def use_norm(self, model_name):
+        '''
+            experimental
+        '''
+        models = os.path.join(os.environ['BASE_DIR'], "models")
+        path = os.path.join(models, model_name)
+        path = os.path.join(path, "norm.pkl")
+        with open(path, "rb+") as f:
+            self.x_scaler = pickle.load(f)
+        self.x = self.x_scaler.transform(self.x)
+
+
 class DummyDataset():
     def __init__(self, x, y):
         self.x = x
