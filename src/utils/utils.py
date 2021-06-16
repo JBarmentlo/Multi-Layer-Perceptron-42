@@ -52,8 +52,9 @@ def create_dataset_from_path(path = path, usecols = usefull_cols, y_col = 1, y_c
 
 
 def is_overfitting(losses):
-    if len(losses) < 3:
+    if len(losses) < losses.maxlen:
         return False
-    if ((losses[0] < losses[1]) and (losses[1] < losses[2])):
-        return True
-    return False
+    for i in range(losses.maxlen - 1):
+        if (losses[i] > losses[i + 1]):
+            return False
+    return True

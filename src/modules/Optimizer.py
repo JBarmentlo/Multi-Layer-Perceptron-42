@@ -5,7 +5,7 @@ optimizerlogger = logging.getLogger("Optimizer")
 optimizerlogger.setLevel(logging.WARNING)
 
 class Optimizer():
-    def __init__(self, learning_rate = 0.1, Loss = CrossEntropyLoss()):
+    def __init__(self, learning_rate = 0.1, Loss : CrossEntropyLoss = CrossEntropyLoss()):
         '''
             Method : "classic", "NAG" : Nesterov Accellerated Gradient
         '''

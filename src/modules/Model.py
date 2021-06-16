@@ -2,10 +2,12 @@ from .Layer import Layer
 from .Optimizer import Optimizer
 from .Loss import CrossEntropyLoss
 from .K_fold_iterator import KFoldIterator
+from .Grapher import Grapher
 from utils import delete_dir_and_contents
 import os
 import pickle
 import numpy as np
+import pandas as pd
 
 
 def make_layer_list_from_sizes_and_activations(sizes, activations):
@@ -32,6 +34,7 @@ def load_model(model_name = "mymodel"):
         m = Model(sizes, activations, optimizer=Optimizer)
         for i in range(len(sizes) - 1):
             m.layers[i].w = np.genfromtxt(os.path.join(path, f"weights_{i}.csv"), delimiter = ",")
+        m.grapher.metrics = pd.read_csv(os.path.join(path, "metrics.csv"))
     except:
         print("Enter a valid path please")
         raise ValueError
@@ -39,12 +42,13 @@ def load_model(model_name = "mymodel"):
 
 
 class Model():
-    def __init__(self, sizes, activations, optimizer = Optimizer(learning_rate = 0.1, Loss = CrossEntropyLoss())):
+    def __init__(self, sizes, activations, optimizer : Optimizer = Optimizer(learning_rate = 0.1, Loss = CrossEntropyLoss())):
         self.layers = make_layer_list_from_sizes_and_activations(sizes, activations)
         self.Optimizer = optimizer
         self.Optimizer.layers = self.layers
         self.sizes = sizes
         self.activations = activations
+        self.grapher = Grapher()
 
 
     def feed_forward(self, x):
@@ -81,6 +85,7 @@ class Model():
             pickle.dump(self.Optimizer, f)
         for i in range(len(self.layers)):
             np.savetxt(os.path.join(path, f"weights_{i}.csv"), self.layers[i].w, delimiter = ",")
+        self.grapher.metrics.to_csv(os.path.join(path, "metrics.csv"))
 
 
 

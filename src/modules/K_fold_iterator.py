@@ -7,6 +7,9 @@ class KFoldIterator():
         self.x = x
         self.y = y
         self.size = x.shape[0]
+        if (self.k > self.size):
+            print(f"The number of folds must be smaller than {self.size - 1}. Stopping Excecution.")
+            raise ValueError
         self.current_k = -1
         self.gen_random_idx()
 
@@ -20,10 +23,10 @@ class KFoldIterator():
         '''
             i can take values from 0 to k - 1 (included)
         '''
-        test_mask = np.ones(self.size, dtype=bool)
+        test_mask = np.zeros(self.size, dtype=bool)
         test_idx = np.arange(int(i * self.size / self.k), int((i + 1) * self.size / self.k), 1)
         test_idx = self.idx[test_idx]
-        test_mask[test_idx] = False
+        test_mask[test_idx] = True
         train_mask = ~test_mask
         self.x_train = self.x[train_mask, :]
         self.y_train = self.y[train_mask, :]

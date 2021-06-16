@@ -9,7 +9,7 @@ import argparse
 # CONFIG ARGUMENTS
 folds = 5
 reset_between_folds = False # set Trueto reset the model weights at every fold to evaluate the learning preocesstpt
-epochs = 200
+epochs = 400
 batchsize = 32
 loss = CrossEntropyLoss()
 optimizer = NAGOptimizer(learning_rate = 0.03, momentum = 0.9)
@@ -26,29 +26,29 @@ def epoch_print(m, train_dataset, test_dataset):
 
 
 def end_epoch_print(m, d):
-    print(f"Loss: {m.Optimizer.Loss.loss(m.feed_forward(d.x), d.y):.4f}")
+    print(f"General Loss: {m.Optimizer.Loss.loss(m.feed_forward(d.x), d.y):.4f}")
 
 
 if __name__ == "__main__":
     np.random.seed(45)
-    grapher = Grapher()
     d = create_dataset_from_path(dataset_path, usecols = usecols, y_col = ycol, y_categorical = y_categorical)
     kfold_iterator = KFoldIterator(d.x, d.y, folds)
     m = Model(sizes = [d.x.shape[1], 15, 8, d.y.shape[1]], activations = ["sigmoid", "sigmoid", "softmax"], optimizer = optimizer)
     train_dataset, test_dataset = next(kfold_iterator)
     losses = deque(maxlen=5)
+
     for e in range(epochs):
         m.train(train_dataset, batchsize = batchsize)
-        loss = m.Optimizer.Loss.loss(m.feed_forward(test_dataset.x), test_dataset.y)
-        grapher.add_data_point(e , loss, 0,0)
-        losses.append(loss)
+        m.grapher.calculate_metrics(m, train_dataset, test_dataset, d)
+        m.grapher.print_metrics()
+        losses.append(m.grapher.val_loss)
         if (is_overfitting(losses)):
+            print("Model overfitting: Early Stopping.")
             break
-        epoch_print(m, train_dataset, test_dataset)
     end_epoch_print(m, d)
-    print("\n")
+    
     calculate_and_display_metrics(m, d.x, d.y)
-    grapher.plot_metrics()
+    m.grapher.plot_metrics()
     m.save(model_name)
     d.save_norm(model_name)
     # a = m.feed_forward(np.ones([10, 1]))
