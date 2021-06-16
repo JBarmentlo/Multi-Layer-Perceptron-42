@@ -10,5 +10,6 @@ python3.8 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 source .env
-python 
+python src/train.py
+python src/test.py data/data.csv mymodel
 ```
