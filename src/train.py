@@ -21,13 +21,6 @@ usecols = [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 1
 model_name = "mymodel"
 
 
-def epoch_print(m, train_dataset, test_dataset):
-    print(f"Epoch: {e + 1:4}/{epochs}   \tLoss: {m.Optimizer.Loss.loss(m.feed_forward(train_dataset.x), train_dataset.y):.4f}    \tValidation Loss: {m.Optimizer.Loss.loss(m.feed_forward(test_dataset.x), test_dataset.y):.4f}")
-
-
-def end_epoch_print(m, d):
-    print(f"General Loss: {m.Optimizer.Loss.loss(m.feed_forward(d.x), d.y):.4f}")
-
 
 if __name__ == "__main__":
     np.random.seed(45)
@@ -45,13 +38,10 @@ if __name__ == "__main__":
         if (is_overfitting(losses)):
             print("Model overfitting: Early Stopping.")
             break
-    end_epoch_print(m, d)
-    
+
+    print(f"General Loss: {m.Optimizer.Loss.loss(m.feed_forward(d.x), d.y):.4f}")
+
     calculate_and_display_metrics(m, d.x, d.y)
     m.grapher.plot_metrics()
     m.save(model_name)
     d.save_norm(model_name)
-    # a = m.feed_forward(np.ones([10, 1]))
-    # kfold = d.k_fold_iter(5)
-    # for xtr, ytr, xte, yte in kfold:
-    #     print(xtr.shape, ytr.shape, xte.shape, yte.shape)
