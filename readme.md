@@ -1,5 +1,5 @@
 # Multi Layer Perceptron
-*** In this project I will implement a modular libray for feed forward deep learning models. Only numpy will be used. ***
+***In this project I will implement a modular libray for feed forward deep learning models. Only numpy will be used.***
 
 ## How-To run it ?
 You will need python 3.8 or more.
