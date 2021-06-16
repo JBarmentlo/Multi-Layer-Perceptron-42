@@ -9,8 +9,8 @@ import argparse
 # CONFIG ARGUMENTS
 folds = 5
 reset_between_folds = False # set Trueto reset the model weights at every fold to evaluate the learning preocesstpt
-epochs = 400
-batchsize = 32
+epochs = 300
+batchsize = 64
 loss = CrossEntropyLoss()
 optimizer = NAGOptimizer(learning_rate = 0.03, momentum = 0.9)
 

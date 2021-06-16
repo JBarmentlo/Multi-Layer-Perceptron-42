@@ -37,7 +37,7 @@ def calculate_metrics(tp, fp, tn, fn):
 
 def print_metrics(tp, fp, tn, fn):
     sensitivity, specificity, precision, f1 = calculate_metrics(tp, fp, tn, fn)
-    print(f"{sensitivity = :.2f}, {specificity = :.2f}, {precision = :.2f}, {f1 = :.2f}\n")
+    print(f"{sensitivity = :.3f}, {specificity = :.3f}, {precision = :.3f}, {f1 = :.3f}\n")
 
 def calculate_and_display_metrics(model, x, y):
     '''
